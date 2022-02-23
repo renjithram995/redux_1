@@ -1,38 +1,44 @@
-import { useSelector, useDispatch } from "react-redux";
+import { Component } from "react";
+import { connect } from "react-redux";
 
 import classes from "./Counter.module.css";
 
-const Counter = () => {
-  const dispatchStore = useDispatch();
-  const counter = useSelector((state) => state.counter);
-
-  const toggleCounterHandler = () => {};
-
-  const toggleCounterValue = (isIncrement) => {
+class Counter extends Component {
+  toggleCounterValue (isIncrement) {
     if (isIncrement) {
-      dispatchStore({
-        type: "increment",
-      });
+      this.props.increment()
     } else {
-      dispatchStore({
-        type: "decrement",
-      });
+      this.props.decrement()
     }
   };
+  toggleCounterHandler () {}
+  render () {
+    return (
+      <main className={classes.counter}>
+        <h1>Redux Counter</h1>
+        <div className={classes.value}>{this.props.counterValue}</div>
+        <div>
+          <button onClick={this.toggleCounterValue.bind(this, true)}>Increment</button>
+          <button onClick={this.toggleCounterValue.bind(this, false)}>
+            Decrement
+          </button>
+        </div>
+        <button onClick={this.toggleCounterHandler}>Toggle Counter</button>
+      </main>
+    );
+  }
+}
+const mapStateToPros = (state) => {
+  return {
+    counterValue: state.counter
+  }
+}
 
-  return (
-    <main className={classes.counter}>
-      <h1>Redux Counter</h1>
-      <div className={classes.value}>{counter}</div>
-      <div>
-        <button onClick={toggleCounterValue.bind(null, true)}>Increment</button>
-        <button onClick={toggleCounterValue.bind(null, false)}>
-          Decrement
-        </button>
-      </div>
-      <button onClick={toggleCounterHandler}>Toggle Counter</button>
-    </main>
-  );
-};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    increment: () => dispatch({ type: 'increment'}),
+    decrement: () => dispatch({ type: 'decrement'})
+  }
+}
 
-export default Counter;
+export default connect(mapStateToPros, mapDispatchToProps)(Counter);
