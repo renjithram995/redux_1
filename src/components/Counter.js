@@ -6,7 +6,11 @@ const Counter = () => {
   const dispatchStore = useDispatch();
   const counter = useSelector((state) => state.counter);
 
-  const toggleCounterHandler = () => {};
+  const toggleCounterHandler = () => {
+    dispatchStore({
+      type: "reset",
+    });
+  };
 
   const toggleCounterValue = (isIncrement) => {
     if (isIncrement) {
